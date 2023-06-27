@@ -1,0 +1,1230 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_CLOCK_DATA",
+      "label": "Clock Data",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "frser-sqlite-datasource",
+      "pluginName": "SQLite"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "datasource",
+      "id": "frser-sqlite-datasource",
+      "name": "SQLite",
+      "version": "3.1.4"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.5.3"
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": false,
+        "hide": false,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Monitors 5071a cesium clock for end-of-life indicators",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_CLOCK_DATA}"
+      },
+      "description": "A sudden jump in the electron multiplier voltage may indicate that the CBT is entering its end-of-life period. This jump will be around 2 to 50 days prior to failure. After this, it will increase until it hits a maximum value of 2553 V.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_CLOCK_DATA}"
+          },
+          "hide": false,
+          "queryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([E-multiplier], 'VCuA% ') AS REAL) as 'Electron Multiplier'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([E-multiplier], 'VCuA% ') AS REAL) as 'Electron Multiplier'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Electron Multiplier Voltage (V)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_CLOCK_DATA}"
+      },
+      "description": "This may show an average decrease up to 25 days prior to CBT failure. It will also vary much more during the end-of-life period.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_CLOCK_DATA}"
+          },
+          "hide": false,
+          "queryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([RF amplitude 2], 'VCuA% ') AS REAL) as 'RF Amplitude 2'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([RF amplitude 2], 'VCuA% ') AS REAL) as 'RF Amplitude 2'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "RF Amplitude 2 (% of Maximum)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_CLOCK_DATA}"
+      },
+      "description": "The ion pump current should have a low startup value (typically near 0.0) and remain constant. Some devices, however, work quite well with constant values of 10, 20, or higher (USNO has one device working well with an ion pump current of 36.0 microamps). This value is one of those \"personality\" characteristics of each device. A high current value can indicate a vacuum or electrical leak, that the tube has been off for a long period, or that the tube is contaminated. A current greater than 50 microamps will cause shutdown.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 5
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_CLOCK_DATA}"
+          },
+          "hide": false,
+          "queryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([Ion Pump], 'VCuA% ') AS REAL) as 'Ion Pump Current'\nfrom data\nWHERE time >= 1686677400000 / 1000 and time < 1687459895057 / 1000",
+          "queryType": "table",
+          "rawQueryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([Ion Pump], 'VCuA% ') AS REAL) as 'Ion Pump Current'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Ion Pump Current (µA)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_CLOCK_DATA}"
+      },
+      "description": "Oscillator control percentage is a very important value to monitor. The value can be positive or negative and is very characteristic of the device. One standard may have an oscillator control value of -8.6% and another standard may have a value of -43.1%. Neither of these values \nalone means that the clock is performing (or will perform) poorly. A variation in the value may suggest a future failure. What is important about the oscillator control percentage for performance is its frequency and amount of change. For example, USNO has had at least two standards that exhibit a phase or rate change that was coincident with a change in its oscillator control percentage. Such an occurrence may be due to the standard experiencing an environmental change (temperature and/or humidity), a Cesium Beam Tube (CBT) change, or a CBT controller board change, or it may be a precursor to a failure.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_CLOCK_DATA}"
+          },
+          "hide": false,
+          "queryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([Osc. control], 'VCuA% ') AS REAL) as 'Oscillator Control Percentage'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([Osc. control], 'VCuA% ') AS REAL) as 'Oscillator Control Percentage'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Oscillator Control Percentage (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_CLOCK_DATA}"
+      },
+      "description": "The signal gain percentage should be constant at 14.4% as long as EMV is below maximum of 2553 V. It will quickly rise to 100% after the EMV has hit the maximum. Although signal gain percentage does show when the CBT has failed, it will not show any signs beforehand.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_CLOCK_DATA}"
+          },
+          "hide": false,
+          "queryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([Signal Gain], 'VCuA% ') AS REAL) as 'Signal Gain Percentage'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([Signal Gain], 'VCuA% ') AS REAL) as 'Signal Gain Percentage'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Signal Gain Percentage (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_CLOCK_DATA}"
+      },
+      "description": "The internal temperature should typically range from 35 to 45 degrees Celsius. It will change as the standard's environment changes.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 10
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_CLOCK_DATA}"
+          },
+          "hide": false,
+          "queryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([Thermometer], 'VCuA% ') AS REAL) as 'Internal Temperature'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM([Thermometer], 'VCuA% ') AS REAL) as 'Internal Temperature'\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Internal Temperature (°C)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_CLOCK_DATA}"
+      },
+      "description": "Use the \"Measurement 1\" variable at the top of the dashboard to change which measurement is graphed here.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#ff4ed8",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_CLOCK_DATA}"
+          },
+          "hide": false,
+          "queryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM($measurement1, 'VCuA%MJD ') as REAL) as $measurement1\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM($measurement1, 'VCuA%MJD ') as REAL) as $measurement1\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Measurement 1",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_CLOCK_DATA}"
+      },
+      "description": "Use the \"Measurement 2\" variable at the top of the dashboard to change which measurement is graphed here.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#05d3c8",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_CLOCK_DATA}"
+          },
+          "hide": false,
+          "queryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM($measurement2, 'VCuA%MJD ') AS REAL) as $measurement2\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "queryType": "table",
+          "rawQueryText": "SELECT CAST([NOW_UNIX] AS INT) as time, CAST(TRIM($measurement2, 'VCuA%MJD ') AS REAL) as $measurement2\nfrom data\nWHERE time >= $__from / 1000 and time < $__to / 1000",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Measurement 2",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1h",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "[RF amplitude 1]",
+          "value": "[RF amplitude 1]"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Measurement 1",
+        "multi": false,
+        "name": "measurement1",
+        "options": [
+          {
+            "selected": false,
+            "text": "[Thermometer]",
+            "value": "[Thermometer]"
+          },
+          {
+            "selected": false,
+            "text": "[+5V  supply]",
+            "value": "[+5V  supply]"
+          },
+          {
+            "selected": false,
+            "text": "[-12V supply]",
+            "value": "[-12V supply]"
+          },
+          {
+            "selected": false,
+            "text": "[+12V supply]",
+            "value": "[+12V supply]"
+          },
+          {
+            "selected": false,
+            "text": "[uP Clock PLL]",
+            "value": "[uP Clock PLL]"
+          },
+          {
+            "selected": false,
+            "text": "[87MHz PLL]",
+            "value": "[87MHz PLL]"
+          },
+          {
+            "selected": false,
+            "text": "[DRO Tuning]",
+            "value": "[DRO Tuning]"
+          },
+          {
+            "selected": false,
+            "text": "[SAW Tuning]",
+            "value": "[SAW Tuning]"
+          },
+          {
+            "selected": false,
+            "text": "[Mass spec]",
+            "value": "[Mass spec]"
+          },
+          {
+            "selected": false,
+            "text": "[HW Ionizer]",
+            "value": "[HW Ionizer]"
+          },
+          {
+            "selected": false,
+            "text": "[Ion Pump]",
+            "value": "[Ion Pump]"
+          },
+          {
+            "selected": false,
+            "text": "[Osc. Oven]",
+            "value": "[Osc. Oven]"
+          },
+          {
+            "selected": false,
+            "text": "[CBT Oven Err]",
+            "value": "[CBT Oven Err]"
+          },
+          {
+            "selected": false,
+            "text": "[CBT Oven]",
+            "value": "[CBT Oven]"
+          },
+          {
+            "selected": false,
+            "text": "[Signal Gain]",
+            "value": "[Signal Gain]"
+          },
+          {
+            "selected": false,
+            "text": "[E-multiplier]",
+            "value": "[E-multiplier]"
+          },
+          {
+            "selected": false,
+            "text": "[C-field curr]",
+            "value": "[C-field curr]"
+          },
+          {
+            "selected": false,
+            "text": "[Zeeman Freq]",
+            "value": "[Zeeman Freq]"
+          },
+          {
+            "selected": false,
+            "text": "[RF amplitude 2]",
+            "value": "[RF amplitude 2]"
+          },
+          {
+            "selected": true,
+            "text": "[RF amplitude 1]",
+            "value": "[RF amplitude 1]"
+          },
+          {
+            "selected": false,
+            "text": "[Osc. control]",
+            "value": "[Osc. control]"
+          },
+          {
+            "selected": false,
+            "text": "[Freq Offset]",
+            "value": "[Freq Offset]"
+          },
+          {
+            "selected": false,
+            "text": "[Log status]",
+            "value": "[Log status]"
+          },
+          {
+            "selected": false,
+            "text": "[Power source]",
+            "value": "[Power source]"
+          },
+          {
+            "selected": false,
+            "text": "[Status summary]",
+            "value": "[Status summary]"
+          },
+          {
+            "selected": false,
+            "text": "[CBT ID]",
+            "value": "[CBT ID]"
+          },
+          {
+            "selected": false,
+            "text": "[EUT_MJD]",
+            "value": "[EUT_MJD]"
+          },
+          {
+            "selected": false,
+            "text": "[EUT_IDN]",
+            "value": "[EUT_IDN]"
+          },
+          {
+            "selected": false,
+            "text": "[NOW_UNIX]",
+            "value": "[NOW_UNIX]"
+          },
+          {
+            "selected": false,
+            "text": "[NOW_MJD]",
+            "value": "[NOW_MJD]"
+          },
+          {
+            "selected": false,
+            "text": "[NOW_LOC]",
+            "value": "[NOW_LOC]"
+          },
+          {
+            "selected": false,
+            "text": "[NOW_UTC]",
+            "value": "[NOW_UTC]"
+          }
+        ],
+        "query": "[Thermometer], [+5V  supply], [-12V supply], [+12V supply], [uP Clock PLL], [87MHz PLL], [DRO Tuning], [SAW Tuning], [Mass spec], [HW Ionizer], [Ion Pump], [Osc. Oven], [CBT Oven Err], [CBT Oven], [Signal Gain], [E-multiplier], [C-field curr], [Zeeman Freq], [RF amplitude 2], [RF amplitude 1], [Osc. control], [Freq Offset], [Log status], [Power source], [Status summary], [CBT ID], [EUT_MJD], [EUT_IDN], [NOW_UNIX], [NOW_MJD], [NOW_LOC], [NOW_UTC]",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "[CBT Oven]",
+          "value": "[CBT Oven]"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Measurement 2",
+        "multi": false,
+        "name": "measurement2",
+        "options": [
+          {
+            "selected": false,
+            "text": "[Thermometer]",
+            "value": "[Thermometer]"
+          },
+          {
+            "selected": false,
+            "text": "[+5V  supply]",
+            "value": "[+5V  supply]"
+          },
+          {
+            "selected": false,
+            "text": "[-12V supply]",
+            "value": "[-12V supply]"
+          },
+          {
+            "selected": false,
+            "text": "[+12V supply]",
+            "value": "[+12V supply]"
+          },
+          {
+            "selected": false,
+            "text": "[uP Clock PLL]",
+            "value": "[uP Clock PLL]"
+          },
+          {
+            "selected": false,
+            "text": "[87MHz PLL]",
+            "value": "[87MHz PLL]"
+          },
+          {
+            "selected": false,
+            "text": "[DRO Tuning]",
+            "value": "[DRO Tuning]"
+          },
+          {
+            "selected": false,
+            "text": "[SAW Tuning]",
+            "value": "[SAW Tuning]"
+          },
+          {
+            "selected": false,
+            "text": "[Mass spec]",
+            "value": "[Mass spec]"
+          },
+          {
+            "selected": false,
+            "text": "[HW Ionizer]",
+            "value": "[HW Ionizer]"
+          },
+          {
+            "selected": false,
+            "text": "[Ion Pump]",
+            "value": "[Ion Pump]"
+          },
+          {
+            "selected": false,
+            "text": "[Osc. Oven]",
+            "value": "[Osc. Oven]"
+          },
+          {
+            "selected": false,
+            "text": "[CBT Oven Err]",
+            "value": "[CBT Oven Err]"
+          },
+          {
+            "selected": true,
+            "text": "[CBT Oven]",
+            "value": "[CBT Oven]"
+          },
+          {
+            "selected": false,
+            "text": "[Signal Gain]",
+            "value": "[Signal Gain]"
+          },
+          {
+            "selected": false,
+            "text": "[E-multiplier]",
+            "value": "[E-multiplier]"
+          },
+          {
+            "selected": false,
+            "text": "[C-field curr]",
+            "value": "[C-field curr]"
+          },
+          {
+            "selected": false,
+            "text": "[Zeeman Freq]",
+            "value": "[Zeeman Freq]"
+          },
+          {
+            "selected": false,
+            "text": "[RF amplitude 2]",
+            "value": "[RF amplitude 2]"
+          },
+          {
+            "selected": false,
+            "text": "[RF amplitude 1]",
+            "value": "[RF amplitude 1]"
+          },
+          {
+            "selected": false,
+            "text": "[Osc. control]",
+            "value": "[Osc. control]"
+          },
+          {
+            "selected": false,
+            "text": "[Freq Offset]",
+            "value": "[Freq Offset]"
+          },
+          {
+            "selected": false,
+            "text": "[Log status]",
+            "value": "[Log status]"
+          },
+          {
+            "selected": false,
+            "text": "[Power source]",
+            "value": "[Power source]"
+          },
+          {
+            "selected": false,
+            "text": "[Status summary]",
+            "value": "[Status summary]"
+          },
+          {
+            "selected": false,
+            "text": "[CBT ID]",
+            "value": "[CBT ID]"
+          },
+          {
+            "selected": false,
+            "text": "[EUT_MJD]",
+            "value": "[EUT_MJD]"
+          },
+          {
+            "selected": false,
+            "text": "[EUT_IDN]",
+            "value": "[EUT_IDN]"
+          },
+          {
+            "selected": false,
+            "text": "[NOW_UNIX]",
+            "value": "[NOW_UNIX]"
+          },
+          {
+            "selected": false,
+            "text": "[NOW_MJD]",
+            "value": "[NOW_MJD]"
+          },
+          {
+            "selected": false,
+            "text": "[NOW_LOC]",
+            "value": "[NOW_LOC]"
+          },
+          {
+            "selected": false,
+            "text": "[NOW_UTC]",
+            "value": "[NOW_UTC]"
+          }
+        ],
+        "query": "[Thermometer], [+5V  supply], [-12V supply], [+12V supply], [uP Clock PLL], [87MHz PLL], [DRO Tuning], [SAW Tuning], [Mass spec], [HW Ionizer], [Ion Pump], [Osc. Oven], [CBT Oven Err], [CBT Oven], [Signal Gain], [E-multiplier], [C-field curr], [Zeeman Freq], [RF amplitude 2], [RF amplitude 1], [Osc. control], [Freq Offset], [Log status], [Power source], [Status summary], [CBT ID], [EUT_MJD], [EUT_IDN], [NOW_UNIX], [NOW_MJD], [NOW_LOC], [NOW_UTC]",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3w",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Cesium Clock Data",
+  "uid": "a45ce478-a535-484d-b94a-0e2f4ed5ea33",
+  "version": 29,
+  "weekStart": ""
+}

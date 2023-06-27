@@ -1,0 +1,3 @@
+__pycache__/
+clock-data-*.db
+update-csv.py
